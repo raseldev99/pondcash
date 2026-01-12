@@ -276,7 +276,7 @@
                             
                             <div class="mb-3">
                              <label>
-                                    <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+                                    <div class="g-recaptcha" data-sitekey="6LcBT0gsAAAAAJwNZ2hVzh_d6MgpH9BhlSkVkkCh"></div>
                                         <span class="text-danger" id="captchaError"></span>
                                    </label>
                                    

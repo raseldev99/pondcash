@@ -1,0 +1,92 @@
+//  ===================================================================================================================
+//  ? TIP:  It is recommended to use this file for overriding bootstrap extended dark variables (_bootstrap-extended/_variables-dark.scss).
+//  Copy and paste variables as needed, modify their values, and remove the !default flag.
+//  ===================================================================================================================
+
+//@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+//@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+//@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+//$success: #f0f000 !default;
+
+
+//$primary: #01d676;
+////$warning: #f0f000;
+//$secondary: #55657e;
+//$body-bg: #0d131c;
+//$body-color: white;
+//$base: #161f2c;
+//$card-bg: #161f2c;
+
+$primary: #ed1d49;
+//$warning: #f0f000;
+$secondary: #7b879d;
+$body-bg: #141523;
+$body-color: #e4e4e7;
+$base: #1d1e30;
+$card-bg: #1d1e30;
+
+$headings-color: $primary;
+
+
+$dark: #1d1e30;
+
+$input-border-color: $secondary;
+$input-border-color-focus: $primary;
+$input-bg: $base;
+$input-color: $body-color;
+$input-placeholder-color: $secondary;
+$input-focus-bg: $base;
+$input-focus-color: $body-color;
+$input-focus-border-color: $primary;
+$input-disabled-bg: $base;
+$input-disabled-color: $secondary;
+$input-disabled-border-color: $secondary;
+$input-border-hover-color: $primary;
+$form-check-input-checked-border-color: $secondary;
+
+$nav-tabs-link-active-bg: $body-bg;
+$nav-tabs-link-active-color: $body-color;
+$nav-link-color: $body-color;
+$nav-tabs-link-color: $body-color;
+
+$input-font-size: 14px;
+$font-family-base: 'Poppins', sans-serif;
+$font-weight-base: 400;
+$font-size-base: 14;
+// navbar
+//$nav-tabs-link-active-bg: white;
+//$nav-tabs-link-active-bg: $base;
+
+
+$tooltip-font-size:                 13px;
+$tooltip-color:                     $secondary;
+$tooltip-bg:                        $base;
+
+
+$pagination-bg: $dark;
+$pagination-disabled-color: $secondary;
+$pagination-color: white;
+$pagination-active-color: white;
+$pagination-padding-y: 0.5rem;
+$pagination-padding-x: 0.75rem;
+
+$accordion-icon-color:                         $body-color;
+$accordion-icon-color-active:                  #fff;
+
+//$border-radius: 20px;
+//$border-radius-lg: 20px;
+//$border-radius-sm: 20px;
+//$badge-border-radius: 20px;
+//$accordion-border-radius: 20px;
+
+$border-radius: 0.75rem;
+$border-radius-lg: 0.75rem;
+$border-radius-sm: 0.75rem;
+$badge-border-radius: 0.75rem;
+$accordion-border-radius: 0.75rem;
+
+:root {
+    --bs-base: #{$base};
+    --body-color: #{$body-color};
+}

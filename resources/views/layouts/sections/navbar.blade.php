@@ -1,4 +1,4 @@
-<nav class="layout-navbar container-fluid navbar navbar-expand-xl navbar-detached align-items-center" style="background:linear-gradient(45deg,#12dfc2,#09093c,#00806e,#091153);"
+<nav class="layout-navbar container-fluid navbar navbar-expand-xl navbar-detached align-items-center" style="background: #1a1a2e;"
      id="layout-navbar"
 >
     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">

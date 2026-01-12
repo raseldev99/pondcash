@@ -125,13 +125,13 @@
         <x-toaster-hub/> <!-- 👈 -->
         
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-5H80KLG7YS"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=GTM-NNGSXD2R"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-5H80KLG7YS');
+  gtag('config', 'GTM-NNGSXD2R');
 </script>
 
         @stack('modals')

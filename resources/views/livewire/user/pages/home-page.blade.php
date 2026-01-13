@@ -292,8 +292,16 @@
                                     @click="
                                      document.getElementById('captchaError').innerText = '';
 
-                                     const widgetId = window.homeRegisterRecaptchaWidgetId ?? null;
-                                     const captcha = widgetId !== null ? grecaptcha.getResponse(widgetId) : '';
+                                     let captcha = '';
+                                     if (typeof grecaptcha !== 'undefined' && typeof grecaptcha.getResponse === 'function') {
+                                         const widgetId = window.homeRegisterRecaptchaWidgetId;
+                                         if (widgetId !== undefined && widgetId !== null) {
+                                             captcha = grecaptcha.getResponse(widgetId);
+                                         } else {
+                                             // Fallback: try to get response without widget ID (works if only one widget)
+                                             captcha = grecaptcha.getResponse();
+                                         }
+                                     }
 
                                       if (!captcha) {
                                            document.getElementById('captchaError').innerText = 'Please verify that you are not a robot.';

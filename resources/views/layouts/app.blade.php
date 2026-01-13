@@ -205,15 +205,15 @@
     
         <x-toaster-hub/> <!-- 👈 -->
         
-{{--<!-- Google tag (gtag.js) -->--}}
-{{--<script async src="https://www.googletagmanager.com/gtag/js?id=GTM-NNGSXD2R"></script>--}}
-{{--<script>--}}
-{{--  window.dataLayer = window.dataLayer || [];--}}
-{{--  function gtag(){dataLayer.push(arguments);}--}}
-{{--  gtag('js', new Date());--}}
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TSJGDLN2V8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-{{--  gtag('config', 'GTM-NNGSXD2R');--}}
-{{--</script>--}}
+  gtag('config', 'G-TSJGDLN2V8');
+</script>
 
         @stack('modals')
         @include('layouts.modals.offers-api')

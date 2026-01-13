@@ -67,7 +67,6 @@
 
                const loginContainer = document.getElementById('login-recaptcha');
                if (loginContainer && !loginContainer.hasChildNodes()) {
-                   console.log('renderAuthRecaptchas login');
                    grecaptcha.render('login-recaptcha', {
                        sitekey: window.recaptchaSiteKey,
                        callback: function (token) {

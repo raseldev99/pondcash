@@ -59,7 +59,6 @@
 
        <script>
            window.recaptchaSiteKey = "{{ config('recaptcha.api_site_key') }}";
-           window.homeRegisterRecaptchaWidgetId = undefined;
 
            function renderAuthRecaptchas() {
                if (typeof grecaptcha === 'undefined') {
@@ -68,6 +67,7 @@
 
                const loginContainer = document.getElementById('login-recaptcha');
                if (loginContainer && !loginContainer.hasChildNodes()) {
+                   console.log('renderAuthRecaptchas login');
                    grecaptcha.render('login-recaptcha', {
                        sitekey: window.recaptchaSiteKey,
                        callback: function (token) {
@@ -102,7 +102,7 @@
 
                const homeContainer = document.getElementById('home-register-recaptcha');
                if (homeContainer && !homeContainer.hasChildNodes()) {
-                   window.homeRegisterRecaptchaWidgetId = grecaptcha.render('home-register-recaptcha', {
+                   grecaptcha.render('home-register-recaptcha', {
                        sitekey: window.recaptchaSiteKey,
                    });
                }
@@ -129,6 +129,13 @@
                    Livewire.hook('morph.updated', () => {
                        renderAuthRecaptchas();
                        renderHomeRecaptcha();
+                   });
+
+                   Livewire.hook('commit', ({ succeed }) => {
+                        succeed(() => {
+                           renderAuthRecaptchas();
+                           renderHomeRecaptcha();
+                       });
                    });
                });
            });

@@ -39,6 +39,15 @@ return [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('APP_URL') . env('GOOGLE_REDIRECT_URI'),
+        'recaptcha' => [
+            'site_key' => env('GOOGLE_RECAPTCHA_SITE_KEY'),
+            'secret_key' => env('GOOGLE_RECAPTCHA_SECRET_KEY'),
+            'version' => 'v2',
+            'size' => 'normal', // 'normal', 'compact' or 'invisible'.
+            'theme' => 'light', // 'light' or 'dark'.
+        ],
     ],
-
+    'recaptcha' => [
+        'site_key' => env('RECAPTCHA_SITE_KEY')
+    ]
 ];

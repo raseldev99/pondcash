@@ -274,16 +274,13 @@
                             </div>
                             
                             
-                            <div class="mb-3">
-                             <label>
-                                    <div class="g-recaptcha" data-sitekey="6LcBT0gsAAAAAJwNZ2hVzh_d6MgpH9BhlSkVkkCh"></div>
-                                        <span class="text-danger" id="captchaError"></span>
-                                   </label>
+                            <div class="mb-3" wire:ignore>
+                                <div id="home-register-recaptcha"></div>
+                                <span class="text-danger" style="margin-top: 5px;display: block" id="captchaError"></span>
+                            </div>
+
                                    
-                                   </div>
-                                   
-                                   
-                            <div class="mb-3">
+                            <div class="mb-3" >
                                 <div class="form-check form-label text-body">
                                     <input class="form-check-input" type="checkbox" name="remember"
                                            aria-label="Remember Me">
@@ -292,8 +289,32 @@
                             </div>
                             <button class="btn d-flex align-items-center w-100 waves-effect waves-light glowing-border"
                                     :class="loading && 'disabled'"
-                                    @click="loading = true; $dispatch('register', { email: email, password: password }); "
-                                    x-on:register-finished.window="console.log('1212'); loading = false">
+                                    @click="
+                                     document.getElementById('captchaError').innerText = '';
+
+                                     const widgetId = window.homeRegisterRecaptchaWidgetId ?? null;
+                                     const captcha = widgetId !== null ? grecaptcha.getResponse(widgetId) : '';
+
+                                      if (!captcha) {
+                                           document.getElementById('captchaError').innerText = 'Please verify that you are not a robot.';
+                                           return;
+                                      }
+
+                                      loading = true;
+                                     $dispatch('register', {
+                                       email: email,
+                                       password: password,
+                                       captcha: captcha
+                                     });
+                                    "
+
+                                    x-on:register-finished.window="
+                                        loading = false;
+                                        if (typeof grecaptcha !== 'undefined' && window.homeRegisterRecaptchaWidgetId !== undefined) {
+                                            grecaptcha.reset(window.homeRegisterRecaptchaWidgetId);
+                                        }
+                                        document.getElementById('captchaError').innerText = '';
+                                    ">
                                 Sign Up
                             </button>
 

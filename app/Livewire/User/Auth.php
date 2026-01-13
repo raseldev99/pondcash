@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Auth as AuthBase;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
@@ -19,6 +20,7 @@ class Auth extends Component
 {
     public string $email = '';
     public string $password = '';
+    public string $gRecaptchaResponse = '';
     public bool $remember = false;
     public bool $acceptTerms = false;
     public int $activeTab = 1;
@@ -37,10 +39,12 @@ class Auth extends Component
 //     $this->dispatchBrowserEvent('recaptcha:refresh');
 // }
 
-
-
     public function login(): void
     {
+        if (! $this->validateRecaptcha()) {
+            return;
+        }
+
         $credentials = $this->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -66,9 +70,14 @@ class Auth extends Component
 
     public function register(): void
     {
+        if (! $this->validateRecaptcha()) {
+            return;
+        }
+
         $isCustomDomain = setting('protection.email_custom_domain');
         $specificDomain = setting('protection.email_custom_domain_value');
         $customDomainRule = $isCustomDomain && count($specificDomain) > 0 ? '|ends_with:' . implode(',', $specificDomain) : '';
+        
         $this->validate([
             'email' => 'required|email|unique:users' . $customDomainRule,
             'password' => 'required|min:6',
@@ -88,8 +97,14 @@ class Auth extends Component
     }
 
     #[On('register')]
-    public function registerByEvent($email, $password): void
+    public function registerByEvent($email, $password, $captcha = null): void
     {
+        if (! $this->validateRecaptcha($captcha)) {
+            Toaster::error('reCAPTCHA verification failed. Please try again.');
+            $this->dispatch('register-finished');
+            return;
+        }
+
         $isCustomDomain = setting('protection.email_custom_domain');
         $specificDomain = setting('protection.email_custom_domain_value');
         $customDomainRule = $isCustomDomain && count($specificDomain) > 0 ? '|ends_with:' . implode(',', $specificDomain) : '';
@@ -207,4 +222,44 @@ class Auth extends Component
 //        $this->password = 'password';
 //        $this->login();
 //    }
+    protected function validateRecaptcha(?string $token = null): bool
+    {
+        $secret = config('recaptcha.api_secret_key');
+        $siteKey = config('recaptcha.api_site_key');
+
+        // If keys are not configured, skip validation (handy for local/dev)
+        if (empty($secret) || empty($siteKey)) {
+            return true;
+        }
+
+        $token = $token ?? $this->gRecaptchaResponse;
+
+        if (empty($token)) {
+            $this->addError('gRecaptchaResponse', 'Please complete the reCAPTCHA.');
+            return false;
+        }
+
+        try {
+            $response = Http::asForm()
+                ->timeout(config('recaptcha.curl_timeout', 10))
+                ->post('https://' . config('recaptcha.api_domain', 'www.google.com') . '/recaptcha/api/siteverify', [
+                    'secret' => $secret,
+                    'response' => $token,
+                    'remoteip' => request()->ip(),
+                ]);
+
+            if (! $response->successful() || ! $response->json('success')) {
+                $this->addError('gRecaptchaResponse', 'reCAPTCHA verification failed. Please try again.');
+                return false;
+            }
+
+            // Clear token after successful validation
+            $this->gRecaptchaResponse = '';
+
+            return true;
+        } catch (\Throwable $e) {
+            $this->addError('gRecaptchaResponse', 'Unable to verify reCAPTCHA. Please try again later.');
+            return false;
+        }
+    }
 }

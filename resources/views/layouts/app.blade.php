@@ -41,7 +41,6 @@
         @vite(['resources/assets/vendor/js/helpers.js', 'resources/assets/js/config.js'])
         @vite(['resources/assets/css/app.css'])
         @stack('css')
-
         <!-- Google tag (gtag.js) -->
 {{--        @if(setting('services.google.analytics_enable'))--}}
 {{--            <script async defer--}}
@@ -58,8 +57,84 @@
 {{--            </script>--}}
 {{--        @endif--}}
 
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+       <script>
+           window.recaptchaSiteKey = "{{ config('recaptcha.api_site_key') }}";
+           window.homeRegisterRecaptchaWidgetId = undefined;
 
+           function renderAuthRecaptchas() {
+               if (typeof grecaptcha === 'undefined') {
+                   return;
+               }
+
+               const loginContainer = document.getElementById('login-recaptcha');
+               if (loginContainer && !loginContainer.hasChildNodes()) {
+                   grecaptcha.render('login-recaptcha', {
+                       sitekey: window.recaptchaSiteKey,
+                       callback: function (token) {
+                           const input = document.getElementById('login-g-recaptcha-response');
+                           if (input) {
+                               input.value = token;
+                               input.dispatchEvent(new Event('input', { bubbles: true }));
+                           }
+                       }
+                   });
+               }
+
+               const registerContainer = document.getElementById('register-recaptcha');
+               if (registerContainer && !registerContainer.hasChildNodes()) {
+                   grecaptcha.render('register-recaptcha', {
+                       sitekey: window.recaptchaSiteKey,
+                       callback: function (token) {
+                           const loginInput = document.getElementById('login-g-recaptcha-response');
+                           if (loginInput) {
+                               loginInput.value = token;
+                               loginInput.dispatchEvent(new Event('input', { bubbles: true }));
+                           }
+                       }
+                   });
+               }
+           }
+
+           function renderHomeRecaptcha() {
+               if (typeof grecaptcha === 'undefined') {
+                   return;
+               }
+
+               const homeContainer = document.getElementById('home-register-recaptcha');
+               if (homeContainer && !homeContainer.hasChildNodes()) {
+                   window.homeRegisterRecaptchaWidgetId = grecaptcha.render('home-register-recaptcha', {
+                       sitekey: window.recaptchaSiteKey,
+                   });
+               }
+           }
+
+           function onRecaptchaLoad() {
+               renderAuthRecaptchas();
+               renderHomeRecaptcha();
+           }
+
+           document.addEventListener('DOMContentLoaded', function () {
+               const authModal = document.getElementById('authModal');
+               if (authModal) {
+                   authModal.addEventListener('shown.bs.modal', function () {
+                       renderAuthRecaptchas();
+                   });
+               }
+
+               // Home page widget might be visible immediately
+               renderHomeRecaptcha();
+
+               // Re-run renderers after Livewire DOM updates (e.g. after validation errors)
+               document.addEventListener('livewire:init', () => {
+                   Livewire.hook('morph.updated', () => {
+                       renderAuthRecaptchas();
+                       renderHomeRecaptcha();
+                   });
+               });
+           });
+       </script>
+
+       <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
 
         <!-- Google Tag Manager -->
         <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -162,5 +237,35 @@
         @vite(['resources/assets/js/app.js'])
 
         @stack('js')
+
+
+{{--    <script>--}}
+
+{{--        document.addEventListener('DOMContentLoaded',function (){--}}
+{{--            let loginWidget = null;--}}
+{{--            let registerWidget = null;--}}
+
+{{--            function renderCaptchas() {--}}
+{{--                if (typeof grecaptcha === 'undefined') return;--}}
+
+{{--                if (!loginWidget && document.getElementById('login-recaptcha')) {--}}
+{{--                    loginWidget = grecaptcha.render('login-recaptcha', {--}}
+{{--                        sitekey: '{{ config('services.recaptcha.site_key') }}'--}}
+{{--                    });--}}
+{{--                }--}}
+
+{{--                if (!registerWidget && document.getElementById('register-recaptcha')) {--}}
+{{--                    registerWidget = grecaptcha.render('register-recaptcha', {--}}
+{{--                        sitekey: '{{ config('services.recaptcha.site_key') }}'--}}
+{{--                    });--}}
+{{--                }--}}
+{{--            }--}}
+
+{{--            document.getElementById('authModal')--}}
+{{--                .addEventListener('shown.bs.modal', renderCaptchas);--}}
+{{--        })--}}
+{{--    </script>--}}
+
+{{--    <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>--}}
     </body>
 </html>

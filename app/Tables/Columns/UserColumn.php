@@ -33,14 +33,32 @@ class UserColumn extends Column
         if (!$query->getModel() instanceof User) {
             $this->searchQuery = function ($query, $search) use ($isFirst) {
                 $query->whereHas('user', function ($query) use ($search) {
-                    $query->where('email', 'like', "%{$search}%")
-                        ->orWhere('username', 'like', "%{$search}%");
+                    $query->where(function ($q) use ($search) {
+                        $q->where('email', 'like', "%{$search}%")
+                            ->orWhere('username', 'like', "%{$search}%");
+                        
+                        // If search is numeric, also try exact ID match
+                        if (is_numeric($search)) {
+                            $q->orWhere('id', $search);
+                        } else {
+                            $q->orWhere('id', 'like', "%{$search}%");
+                        }
+                    });
                 });
             };
         } else {
             $this->searchQuery = function ($query, $search) use ($isFirst) {
-                $query->where('email', 'like', "%{$search}%")
-                    ->orWhere('username', 'like', "%{$search}%");
+                $query->where(function ($q) use ($search) {
+                    $q->where('email', 'like', "%{$search}%")
+                        ->orWhere('username', 'like', "%{$search}%");
+                    
+                    // If search is numeric, also try exact ID match
+                    if (is_numeric($search)) {
+                        $q->orWhere('id', $search);
+                    } else {
+                        $q->orWhere('id', 'like', "%{$search}%");
+                    }
+                });
             };
         }
 

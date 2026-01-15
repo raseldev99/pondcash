@@ -2,7 +2,9 @@
     $user = $getState();
 @endphp
 @if($user)
+
     <div class="flex items-center gap-2 w-auto">
+        <span class="order-2">{{ $user['id'] }}</span>
         <img src="{{ $user['avatar'] }}" class="w-8 h-8 rounded-full max-w-none" alt="{{ $user['username'] }}">
 
         <div>

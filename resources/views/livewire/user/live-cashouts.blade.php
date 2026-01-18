@@ -66,7 +66,7 @@
                         <div class="swiper-slide fade-in-scale card text-white me-2 p-2"
                             style="cursor: pointer; width: auto !important;" tooltip="true" data-bs-html="true"
                             data-bs-placement="bottom"
-                            title="<div class='text-start text-body'><p class='m-0'>Username: {{ $withdrawal->user->username }}</h6> <p class='m-0'>Name: {{ Auth::user()->privacy ? splitByDashTwoParts($withdrawal->name)['first'] : $withdrawal->name }}</p> <p class='m-0'>Amount: {{ $withdrawal->amount }} Points</p> </div>">
+                            title="<div class='text-start text-body'><p class='m-0'>Username: {{ $withdrawal->user->username }}</h6> <p class='m-0'>Name: {{ Auth::user()?->privacy ? splitByDashTwoParts($withdrawal->name)['first'] : $withdrawal->name }}</p> <p class='m-0'>Amount: {{ $withdrawal->amount }} Points</p> </div>">
                             <div class="card-body p-0 pb-0 text-center"
                                 @click="$dispatch('activity-open', {user_id: '{{ $withdrawal->user->id }}'})">
                                 <div class="d-flex justify-content-center gap-2">

@@ -107,3 +107,33 @@ if(!function_exists('report_to')) {
     }
 
 }
+
+function splitByDashTwoParts(?string $text): array
+{
+    $text = trim((string) $text);
+
+    // If null/empty string
+    if ($text === '') {
+        return [
+            'first'  => null,
+            'second' => null,
+        ];
+    }
+
+    // If no dash, return everything in first
+    if (!str_contains($text, '-')) {
+        return [
+            'first'  => $text,
+            'second' => null,
+        ];
+    }
+
+    // Split into 2 parts only
+    [$first, $second] = array_pad(explode('-', $text, 2), 2, null);
+
+    return [
+        'first'  => $first !== null ? trim($first) : null,
+        'second' => $second !== null ? trim($second) : null,
+    ];
+}
+
